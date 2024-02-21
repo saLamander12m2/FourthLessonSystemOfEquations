@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText inputX1, inputX2; // окна ввода решения задачи
     private Button button; // кнопка проверки решения
 
-    private double D =  b * b - 4 * a * c;
+    private double D = b * b - 4 * a * c;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -49,29 +49,27 @@ public class MainActivity extends AppCompatActivity {
         // задание слушателей на EditText's и кнопку
         inputX1.setOnFocusChangeListener(focusListener); // задание слушателя фокусировки/дефокусировки на EditText
         inputX2.setOnFocusChangeListener(focusListener); // задание слушателя фокусировки/дефокусировки на EditText
-        button.setOnClickListener(listener); // задание слушателя нажатия на кнопку
+        button.setOnClickListener(view -> {
+
+            if (!inputX1.getText().toString().isEmpty() && !inputX2.getText().toString().isEmpty()){
+                int inX1 = Integer.parseInt(inputX1.getText().toString());
+                int inX2 = Integer.parseInt(inputX2.getText().toString());
+
+                if (x1 == inX1 && x2 == inX2) {
+                    randomCoefficient(100);
+                    equation.setText(a + "*X**2 + " + b + "*X + " + c + " = 0");
+                    x1 = (-b + Math.sqrt(D)) / (2 * a);
+                    x2 = (-b - Math.sqrt(D)) / (2 * a);
+                } else {
+                    Toast.makeText(MainActivity.this, "Текущее решение не правильное", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "введите значение X", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    // определение слушателя нажатия на кнопку
-    private View.OnClickListener listener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // определяем ввод ответа
-            int inX1 = Integer.parseInt(inputX1.getText().toString()); // определяем ввод в формате int
-            int inX2 = Integer.parseInt(inputX2.getText().toString()); // определяем ввод в формате int
-            // задаём условие проверки правильного ввода ответа
-            if (x1 == inX1 && x2 == inX2) { // если ввод правильный, то
-                randomCoefficient(100); // генерация новых значений
-                // и обновление уравнений
-                equation.setText(a + "*X**2 + " + b + "*X + " + c + " = 0");
-                // переинициализация готовых решений
-                x1 = (-b + Math.sqrt(D)) / (2 * a);
-                x2 = (-b - Math.sqrt(D)) / (2 * a);
-            } else { // иначе сообщение о неправильности решения
-                Toast.makeText(MainActivity.this, "Текущее решение не правильное", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
+
 
     // создание слушателя фокусировки/дефокусировки на EditText
     private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
@@ -81,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
             switch (view.getId()) {
                 case R.id.inputX1:
-                    if(!b) { // если с R.id.inputX произошла дефокусировка, то
+                    if (!b) { // если с R.id.inputX произошла дефокусировка, то
                         int inX1 = Integer.parseInt(inputX1.getText().toString()); // определяем ввод в формате int
                         if (x1 != inX1) { // если ответ введён не правильно, то
                             inputX1.setTextColor(Color.RED); // подкрашиваем текст в красный
@@ -92,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     break;
                 case R.id.inputX2:
-                    if(!b) { // если с R.id.inputY произошла дефокусировка, то
+                    if (!b) { // если с R.id.inputY произошла дефокусировка, то
                         int intX2 = Integer.parseInt(inputX2.getText().toString()); // определяем ввод в формате int
                         if (x2 != intX2) { // если ответ введён не правильно, то
                             inputX2.setTextColor(Color.RED); // подкрашиваем текст в красный
